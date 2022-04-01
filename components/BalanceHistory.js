@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
 import { GlobalContext } from './context/GlobalContext'
-import * as IoIoIcons from "react-icons/io"
+import {FiEdit} from "react-icons/fi"
 
 export default function BalanceHistory() {
-    const { transactions,deleteTransactions } = useContext(GlobalContext)
+    const { transactions,setEditable } = useContext(GlobalContext)
     const incomeTransactions = transactions?.filter((t) => t.type === 'Income')
     const expenseTransactions = transactions?.filter((t) => t.type === 'Expense')
     const totalIncome = incomeTransactions?.reduce((accumulator, currentValue) => (accumulator += currentValue.amount), 0)
@@ -27,8 +27,8 @@ export default function BalanceHistory() {
                 <hr className='border-slate-300 shadow-inner  rounded-2xl border-l-2 h-16' />
 
                 <div>
-                  1 
-                    <h4 className='font-bold'>{ balance < 0 ? 'Debt' : 'Expense'}</h4>
+                  
+                    <h4 className='font-bold'>Expense</h4>
                    
                     <p className='text-red-500'>${totalExpense}</p>
                 </div>
@@ -38,10 +38,10 @@ export default function BalanceHistory() {
                 <ul className='history overflow-y-scroll h-52'>
                     {
                         transactions?.map((transaction, i) => {
-                            const { id,type, des, amount } = transaction
+                            const { _id,type, title, amount } = transaction
                             return (
-                                <li key={i} className={`tranInHis bg-white my-4 p-2 flex justify-between rounded-md font-semibold shadow-lg border-r-8 ${type === 'Income' ? "border-green-400" : "border-red-400"} relative`} onClick={() => deleteTransactions(id)} ><span className='delIcon duration-300'><IoIoIcons.IoIosRemoveCircleOutline /></span>
-                                    <span className='ml-3'>{des}</span>
+                                <li key={i} className={`tranInHis bg-white my-4 p-2 flex justify-between rounded-md font-semibold shadow-lg border-r-8 ${type === 'Income' ? "border-green-400" : "border-red-400"} relative`} onClick={() => setEditable(transaction)} ><span className='delIcon duration-300 text-gray-600'><FiEdit/></span>
+                                    <span className='ml-3'>{title}</span>
                                     <span>{`${type === 'Income' ? "" : "-"}$${amount}`}</span>
                                 </li>
                             )

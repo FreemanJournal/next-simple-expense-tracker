@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from 'react'
+import React, { createContext, useReducer, useState } from 'react'
 
 const initialState = []
 // transactions:[
@@ -8,11 +8,15 @@ const initialState = []
 const AppReducer = (oldState, action) => {
     let transactions;
     switch (action.type) {
-        case "DELETE":
-            return transactions = oldState.filter((item)=>item.id !== action.payload)
         case "ADD":
-            transactions = [action.payload,...oldState]
+            transactions = [action.payload, ...oldState]
             return transactions
+        case "UPDATE":
+            transactions.map(item => item._id === action.payload.id ? { ...item, ...action.payload.transaction } : item)
+        case "DELETE":
+            return transactions = oldState.filter((item) => item._id !== action.payload)
+        case "DBTransactions":
+            return transactions = action.payload
         default:
             return oldState;
     }
@@ -23,19 +27,35 @@ export const GlobalContext = createContext(initialState)
 // Provider components
 export const GlobalProvider = ({ children }) => {
     const [transactions, dispatch] = useReducer(AppReducer, initialState)
+    const [editable, setEditable] = useState();
 
     // action creators
-    const deleteTransactions = (id) => {
+    const deleteTransaction = (id) => {
         dispatch({ type: "DELETE", payload: id })
     }
-    const addTransactions = (transaction) => {
+    const addTransaction = (transaction) => {
         dispatch({ type: "ADD", payload: transaction })
+    }
+    const updateTransaction = (transaction) => {
+        if (!transaction.title || !transaction.amount) return;
+        dispatch({ type: "UPDATE", payload: { id: transaction._id, transaction } })
+
+
+    }
+
+    const loadDB = (transactions) => {
+        dispatch({ type: "DBTransactions", payload: transactions })
+
     }
 
     return (<GlobalContext.Provider value={{
         transactions,
-        deleteTransactions,
-        addTransactions
+        deleteTransaction,
+        addTransaction,
+        loadDB,
+        editable,
+        setEditable,
+        updateTransaction
     }}>{children}</GlobalContext.Provider>)
 }
 

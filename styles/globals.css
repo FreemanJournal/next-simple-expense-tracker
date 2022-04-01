@@ -17,7 +17,7 @@ body {
   inset: .8em 0 0 .1em;
   cursor: pointer;
   opacity: 0;
-  color: red;
+  /* color: red; */
 }
 
 .tranInHis:hover .delIcon {
@@ -35,5 +35,11 @@ body {
 .history::-webkit-scrollbar-thumb {
   background-color: whitesmoke;
   outline: none;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 /*# sourceMappingURL=globals.css.map */

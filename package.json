@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tailwindcss/forms": "^0.5.0",
+    "moment": "^2.29.1",
     "mongodb": "^4.4.1",
     "mongoose": "^6.2.9",
     "next": "12.1.3",
