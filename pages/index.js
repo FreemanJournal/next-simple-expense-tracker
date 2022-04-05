@@ -5,6 +5,7 @@ import { GlobalContext } from "../components/context/GlobalContext";
 
 export default function Home({ transactions }) {
   const { loadDB } = useContext(GlobalContext)
+  
   useEffect(() => {
     loadDB(transactions)
   }, [])

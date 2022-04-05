@@ -12,7 +12,8 @@ const AppReducer = (oldState, action) => {
             transactions = [action.payload, ...oldState]
             return transactions
         case "UPDATE":
-            transactions.map(item => item._id === action.payload.id ? { ...item, ...action.payload.transaction } : item)
+            // console.log(`transactions`,oldState);
+            return transactions = oldState?.map(item => item._id === action.payload.id ? { ...item, ...action.payload.transaction } : item)
         case "DELETE":
             return transactions = oldState.filter((item) => item._id !== action.payload)
         case "DBTransactions":
@@ -27,6 +28,7 @@ export const GlobalContext = createContext(initialState)
 // Provider components
 export const GlobalProvider = ({ children }) => {
     const [transactions, dispatch] = useReducer(AppReducer, initialState)
+    const [dbTransaction, setDbTransaction] = useState([]);
     const [editable, setEditable] = useState();
 
     // action creators
@@ -37,15 +39,11 @@ export const GlobalProvider = ({ children }) => {
         dispatch({ type: "ADD", payload: transaction })
     }
     const updateTransaction = (transaction) => {
-        if (!transaction.title || !transaction.amount) return;
         dispatch({ type: "UPDATE", payload: { id: transaction._id, transaction } })
-
-
     }
 
     const loadDB = (transactions) => {
         dispatch({ type: "DBTransactions", payload: transactions })
-
     }
 
     return (<GlobalContext.Provider value={{
